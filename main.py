@@ -1,7 +1,30 @@
 from tkinter import *
+import tkinter.messagebox
+import webbrowser
 from pygame import mixer
 
 root = Tk()
+
+#Create the menubar
+
+menubar = Menu(root)
+root.config(menu = menubar)
+
+#Create the submenu
+
+subMenu = Menu(menubar, tearoff = 0)
+menubar.add_cascade(label = "File", menu = subMenu)
+subMenu.add_command(label = "Open")
+subMenu.add_command(label = "Exit", command = root.destroy)
+
+def aboutUs():
+    tkinter.messagebox.showinfo("Mplayer", 'This is a music player build using python Tkinter By,\nShaiful Islam')
+    webbrowser.open('http://www.shaifulislam.com')
+
+subMenu = Menu(menubar, tearoff = 0)
+menubar.add_cascade(label = "Help", menu = subMenu)
+subMenu.add_command(label = "About Us", command = aboutUs)
+
 
 mixer.init()    #Initializing the mixer
 
