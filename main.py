@@ -39,10 +39,8 @@ subMenu.add_command(label="About Us", command=aboutUs)
 mixer.init()  # Initializing the mixer
 
 root.title("mPlayer")
-root.geometry('400x400+200+190')
-
 text = Label(root, text='Let\'s make some noise')
-text.pack()
+text.pack(pady = 10, padx = 10)
 
 
 def playMusic():
@@ -73,33 +71,52 @@ def pauseMusic():
     mixer.music.pause()
     statusbar['text'] = "Music Paused"
 
+def rewindMusic():
+    playMusic()
+    statusbar['text'] = "Music rewinded"
+
 def set_vol(val):
     volume = int(val) / 100
     mixer.music.set_volume(volume)
 
+
+middleFrame = Frame(root)
+middleFrame.pack(pady = 30, padx = 30)
+
 #Adding play button
 
 playPhoto = PhotoImage(file='images/play.png')
-playBtn = Button(root, image=playPhoto, command=playMusic)
-playBtn.pack()
+playBtn = Button(middleFrame, image=playPhoto, command=playMusic)
+playBtn.grid(row = 0, column = 0, padx = 10)
 
 #Adding stop button
 
 stopPhoto = PhotoImage(file='images/stop.png')
-stopBtn = Button(root, image=stopPhoto, command=stopMusic)
-stopBtn.pack()
+stopBtn = Button(middleFrame, image=stopPhoto, command=stopMusic)
+stopBtn.grid(row = 0, column = 1, padx = 10)
 
 #Add pause button
 
 pausePhoto = PhotoImage(file='images/pause.png')
-pauseBtn = Button(root, image=pausePhoto, command=pauseMusic)
-pauseBtn.pack()
+pauseBtn = Button(middleFrame, image=pausePhoto, command=pauseMusic)
+pauseBtn.grid(row = 0, column = 2, padx = 10)
+
+#Add bottom frame
+
+bottomFrame = Frame(root)
+bottomFrame.pack(pady = 10)
+
+#Add rewind button
+
+rewindPhoto = PhotoImage(file='images/rewind.png')
+rewindBtn = Button(bottomFrame, image=rewindPhoto, command=rewindMusic)
+rewindBtn.grid(row = 0, column = 0, padx = 20)
 
 #Adding volume level
 
-scale = Scale(root, from_=0, to=100, orient=HORIZONTAL, command=set_vol)
+scale = Scale(bottomFrame, from_=0, to=100, orient=HORIZONTAL, command=set_vol)
 scale.set(50)
-scale.pack()
+scale.grid(row = 0, column = 1)
 
 # Adding satusbar
 statusbar = Label(root, text="***Welcome to the world of music***", relief=SUNKEN, anchor=W)
