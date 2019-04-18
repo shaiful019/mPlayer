@@ -76,8 +76,24 @@ def rewindMusic():
     statusbar['text'] = "Music rewinded"
 
 def set_vol(val):
+    global volume
     volume = int(val) / 100
     mixer.music.set_volume(volume)
+
+muted = FALSE
+def muteMusic():
+    global muted
+    if muted:
+        mixer.music.set_volume(50)
+        scale.set(50)
+        unmuteBtn.configure(image=unmutePhoto)
+        muted = FALSE
+    else:
+        muted = TRUE
+        mixer.music.set_volume(0)
+        scale.set(0)
+        unmuteBtn.configure(image=mutePhoto)
+
 
 
 middleFrame = Frame(root)
@@ -110,13 +126,20 @@ bottomFrame.pack(pady = 10)
 
 rewindPhoto = PhotoImage(file='images/rewind.png')
 rewindBtn = Button(bottomFrame, image=rewindPhoto, command=rewindMusic)
-rewindBtn.grid(row = 0, column = 0, padx = 20)
+rewindBtn.grid(row = 0, column = 0)
+
+#Adding Mute button
+
+unmutePhoto = PhotoImage(file='images/unmute.png')
+mutePhoto = PhotoImage(file='images/mute.png')
+unmuteBtn = Button(bottomFrame, image=unmutePhoto, command=muteMusic)
+unmuteBtn.grid(row = 0, column = 1)
 
 #Adding volume level
 
 scale = Scale(bottomFrame, from_=0, to=100, orient=HORIZONTAL, command=set_vol)
 scale.set(50)
-scale.grid(row = 0, column = 1)
+scale.grid(row = 0, column = 2)
 
 # Adding satusbar
 statusbar = Label(root, text="***Welcome to the world of music***", relief=SUNKEN, anchor=W)
