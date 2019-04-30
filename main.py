@@ -4,6 +4,7 @@ import tkinter.messagebox
 from tkinter import filedialog
 import webbrowser
 from pygame import mixer
+from mutagen.mp3 import MP3
 
 root = Tk()
 
@@ -13,13 +14,13 @@ menubar = Menu(root)
 root.config(menu=menubar)
 
 
-# Create the submenu
 
 def openFile():
     global filename
     filename = filedialog.askopenfilename()
     print(filename)
 
+# Create the submenu
 
 subMenu = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="File", menu=subMenu)
@@ -39,20 +40,48 @@ subMenu.add_command(label="About Us", command=aboutUs)
 mixer.init()  # Initializing the mixer
 
 root.title("mPlayer")
-text = Label(root, text='Let\'s make some noise')
-text.pack(pady = 10, padx = 10)
+fileLabel = Label(root, text='Let\'s make some noise')
+fileLabel.pack(pady = 10, padx = 10)
+
+lengthLabel = Label(root, text='Total Length is --:--')
+lengthLabel.pack(pady = 10, padx = 10)
+
+
+def showDetails():
+    fileLabel['text'] = "Playing " + os.path.basename(filename)
+    fileExtention = os.path.splitext(filename)
+
+    if(fileExtention[1] == '.mp3'):
+        a = MP3(filename)
+        total_length = a.info.length
+
+    else:
+        a = mixer.Sound(filename)
+        total_length = a.get_length()
+
+
+
+
+    #div - total_length / 60, mod - total_length % 60
+    mins, secs = divmod(total_length, 60)
+    mins = round(mins)
+    secs = round(secs)
+    timeFormat = '{:02d}:{:02d}'.format(mins, secs)
+    lengthLabel['text'] = 'Total Length is ' + timeFormat
+
 
 
 def playMusic():
     global paused
     if(paused):
         mixer.music.unpause()
-        statusbar['text'] = "Playing " + os.path.basename('song1.mp3')
+        statusbar['text'] = "Playing " + os.path.basename(filename)
     else:
         try:
-            mixer.music.load('song1.mp3')
+            mixer.music.load(filename)
             mixer.music.play()
-            statusbar['text'] = "Playing "+ os.path.basename('song1.mp3')
+            statusbar['text'] = "Playing "+ os.path.basename(filename)
+            showDetails()
 
         except:
             tkinter.messagebox.showerror('File not found', "Please load a music file first.")
